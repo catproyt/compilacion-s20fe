@@ -1,1 +1,57 @@
-concurrency: 
+name: Compilar AxionOS S20 FE (r8q)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    env:
+      DEBIAN_FRONTEND: noninteractive
+
+    steps:
+    - name: 🧹 Maximizar espacio y limpiar
+      uses: easimon/maximize-build-space@master
+      with:
+        remove-dotnet: 'true'
+        remove-android: 'true'
+        remove-haskell: 'true'
+        remove-codeql: 'true'
+        remove-docker-images: 'true'
+        swap-size-mb: 8192
+
+    - name: 🛠️ Instalar dependencias críticas
+      run: |
+        # Eliminar repositorios externos que llenan el disco
+        sudo rm -f /etc/apt/sources.list.d/*.list
+        sudo apt-get update -y
+        sudo apt-get install -y -q git gnupg flex bison build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 libncurses5 lib32ncurses5-dev python3 unzip
+        sudo apt-get clean
+        mkdir -p ~/bin
+        curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+        chmod a+x ~/bin/repo
+
+    - name: 📥 Descargar código base
+      run: |
+        mkdir -p ~/rom
+        cd ~/rom
+        ~/bin/repo init -u https://github.com/AxionAOSP/android.git --depth=1 --no-repo-verify
+        rm -rf .repo/manifest.xml
+        git clone https://github.com/catproyt/compilacion-s20fe.git .repo/local_manifests
+        ~/bin/repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+
+    - name: 🚀 Iniciar Compilación
+      run: |
+        cd ~/rom
+        export PATH="~/bin:$PATH"
+        . build/envsetup.sh
+        export SKIP_ABI_CHECKS=true
+        export AXION_MAINTAINER="catpro"
+        axion r8q user gms
+        ax -br -j24
+
+    - name: 📦 Subir la ROM terminada
+      uses: actions/upload-artifact@v4
+      with:
+        name: AxionOS-S20FE-r8q-catpro
+        path: ~/rom/out/target/product/r8q/AxionOS*.zip
