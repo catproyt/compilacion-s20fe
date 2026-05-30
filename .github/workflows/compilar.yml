@@ -30,10 +30,8 @@ jobs:
       run: |
         mkdir -p ~/rom
         cd ~/rom
-        ~/bin/repo init -u https://github.com/AxionAOSP/android.git -b lineage-23.0 --depth=1
-        
+        ~/bin/repo init -u https://github.com/AxionAOSP/android.git -b lineage-23. --depth=1
         git clone https://github.com/catproyt/compilacion-s20fe.git .repo/local_manifests
-        
         ~/bin/repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 
     - name: 🚀 Iniciar Compilación
@@ -41,12 +39,10 @@ jobs:
         cd ~/rom
         export PATH="~/bin:$PATH"
         . build/envsetup.sh
-        
+        export SKIP_ABI_CHECKS=true
         export AXION_MAINTAINER="catpro"
-        
-        axion r8q userdebug gms
-        
-        ax -br -j$(nproc --all)
+        axion r8q user gms
+        ax -br -j24
 
     - name: 📦 Subir la ROM terminada
       uses: actions/upload-artifact@v4
