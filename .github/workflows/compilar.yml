@@ -6,6 +6,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
+    env:
+      DEBIAN_FRONTEND: noninteractive
 
     steps:
     - name: 🧹 Maximizar espacio y limpiar
@@ -21,7 +23,7 @@ jobs:
     - name: 🛠️ Instalar dependencias mínimas
       run: |
         sudo apt-get update -y
-        sudo apt-get install -y git gnupg flex bison build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 libncurses5 lib32ncurses5-dev python3 unzip
+        sudo apt-get install -y -q git gnupg flex bison build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 libncurses5 lib32ncurses5-dev python3 unzip
         sudo apt-get clean
         mkdir -p ~/bin
         curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
@@ -31,11 +33,8 @@ jobs:
       run: |
         mkdir -p ~/rom
         cd ~/rom
-        # Inicializar repo sin rama fija para evitar el error de referencia
         ~/bin/repo init -u https://github.com/AxionAOSP/android.git --depth=1 --no-repo-verify
-        # Eliminar el manifiesto por defecto que está causando el conflicto
         rm -rf .repo/manifest.xml
-        # Clonar tu manifiesto local donde está la configuración del S20 FE
         git clone https://github.com/catproyt/compilacion-s20fe.git .repo/local_manifests
         ~/bin/repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 
