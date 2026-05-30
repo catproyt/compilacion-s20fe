@@ -31,7 +31,7 @@ jobs:
       run: |
         mkdir -p ~/rom
         cd ~/rom
-        ~/bin/repo init -u https://github.com/AxionAOSP/android.git --depth=1
+        ~/bin/repo init -u https://github.com/AxionAOSP/android.git -b lineage-22.1 --depth=1 --no-repo-verify
         git clone https://github.com/catproyt/compilacion-s20fe.git .repo/local_manifests
         ~/bin/repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 
@@ -50,4 +50,3 @@ jobs:
       with:
         name: AxionOS-S20FE-r8q-catpro
         path: ~/rom/out/target/product/r8q/AxionOS*.zip
-        
