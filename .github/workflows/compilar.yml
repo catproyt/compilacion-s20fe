@@ -33,7 +33,7 @@ jobs:
       run: |
         mkdir -p ~/rom
         cd ~/rom
-        ~/bin/repo init -u https://github.com/AxionAOSP/android.git -b lineage-23 --depth=1
+        ~/bin/repo init -u https://github.com/AxionAOSP/android.git -b lineage-22.1 --depth=1
         git clone https://github.com/catproyt/compilacion-s20fe.git .repo/local_manifests
         ~/bin/repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 
