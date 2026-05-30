@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <remove-project name="platform/hardware/samsung" />
+  <project path="device/samsung/r8q" name="Joellucas/android_device_samsung_r8q" remote="github" revision="bka-q2" />
+  <project path="device/samsung/sm8250-common" name="Joellucas/android_device_samsung_sm8250-common" remote="github" revision="bka-q2" />
+  <project path="vendor/samsung/r8q" name="Joellucas/proprietary_vendor_samsung_r8q" remote="github" revision="bka-q2" />
+  <project path="vendor/samsung/sm8250-common" name="Joellucas/proprietary_vendor_samsung_sm8250-common" remote="github" revision="bka-q2" />
+  <project path="vendor/xiaomi/GoogleCamera" name="Joellucas/vendor_xiaomi_GoogleCamera" remote="github" revision="sixteen" />
+  <project path="kernel/samsung/sm8250" name="Joellucas/android_kernel_samsung_sm8250" remote="github" revision="bka-q2" />
+  <project path="hardware/samsung" name="Joellucas/android_hardware_samsung" remote="github" revision="bka-q2" />
+  <project path="hardware/samsung/nfc" name="Joellucas/android_hardware_samsung_nfc" remote="github" revision="bka-q2" />
+  <project path="hardware/samsung_slsi/nfc" name="Joellucas/android_hardware_samsung_slsi_nfc" remote="github" revision="bka-q2" />
+</manifest>
