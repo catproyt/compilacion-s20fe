@@ -31,7 +31,11 @@ jobs:
       run: |
         mkdir -p ~/rom
         cd ~/rom
-        ~/bin/repo init -u https://github.com/AxionAOSP/android.git -b lineage-22.1 --depth=1 --no-repo-verify
+        # Inicializar repo sin rama fija para evitar el error de referencia
+        ~/bin/repo init -u https://github.com/AxionAOSP/android.git --depth=1 --no-repo-verify
+        # Eliminar el manifiesto por defecto que está causando el conflicto
+        rm -rf .repo/manifest.xml
+        # Clonar tu manifiesto local donde está la configuración del S20 FE
         git clone https://github.com/catproyt/compilacion-s20fe.git .repo/local_manifests
         ~/bin/repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 
