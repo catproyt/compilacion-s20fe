@@ -11,11 +11,12 @@ jobs:
     - name: 🧹 Maximizar espacio en el servidor
       uses: easimon/maximize-build-space@master
       with:
-        root-reserve-mb: 8192
-        swap-size-mb: 8192
         remove-dotnet: 'true'
         remove-android: 'true'
         remove-haskell: 'true'
+        remove-codeql: 'true'
+        remove-docker-images: 'true'
+        swap-size-mb: 8192
 
     - name: 🛠️ Instalar dependencias
       run: |
@@ -29,9 +30,8 @@ jobs:
       run: |
         mkdir -p ~/rom
         cd ~/rom
-        ~/bin/repo init -u https://github.com/AxionAOSP/android.git -b bka --depth=1
+        ~/bin/repo init -u https://github.com/AxionAOSP/android.git -b lineage-23.0 --depth=1
         
-        # Aquí ya puse tu usuario catproyt directamente
         git clone https://github.com/catproyt/compilacion-s20fe.git .repo/local_manifests
         
         ~/bin/repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
@@ -40,17 +40,16 @@ jobs:
       run: |
         cd ~/rom
         export PATH="~/bin:$PATH"
-        source build/envsetup.sh
+        . build/envsetup.sh
         
-        export AXION_MAINTAINER="CATPRO"
-        export TARGET_MAINTAINER="CATPRO"
+        export AXION_MAINTAINER="catpro"
         
-        lunch axion_r8q-userdebug
-        mka axion -j$(nproc --all)
+        axion r8q userdebug gms
+        
+        ax -br -j$(nproc --all)
 
     - name: 📦 Subir la ROM terminada
       uses: actions/upload-artifact@v4
       with:
-        name: AxionOS-S20FE-r8q
+        name: AxionOS-S20FE-r8q-catpro
         path: ~/rom/out/target/product/r8q/AxionOS*.zip
-        
